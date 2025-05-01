@@ -65,7 +65,6 @@ export default function App() {
   // const tempQuery = "interstellar";
 
   const { movies, isLoading, error } = useMovies(query);
-
   const [watched, setWatched] = useLocalStorageState([], "watched");
 
   // const [watched, setWatched] = useState([]);
@@ -173,7 +172,7 @@ function Logo() {
   return (
     <div className="logo">
       <span role="img">🍿</span>
-      <h1>MovieMingle</h1>
+      <h1>MOVIE MINGLE</h1>
     </div>
   );
 }
@@ -301,7 +300,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
   useEffect(
     function () {
-      if (userRating) countRef.current = countRef.current++;
+      if (userRating) countRef.current = countRef.current + 1;
+      console.log("User rating set to:", userRating);
     },
     [userRating]
   );
@@ -332,8 +332,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       year,
       poster,
       imdbRating: Number(imdbRating),
-      runtime: Number(runtime.split(" ").at(0)),
       userRating,
+      runtime: Number(runtime.split(" ").at(0)),
       countRatingDecisions: countRef.current,
     };
     onAddWatched(newWatchedMovie);
@@ -463,6 +463,36 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   );
 }
 
+function WatchedMovie({ movie, onDeleteWatched }) {
+  return (
+    <li>
+      <img src={movie.poster} alt={`${movie.title} poster`} />
+      <h3>{movie.title}</h3>
+      <div>
+        <p>
+          <span>⭐️</span>
+          <span>{movie.imdbRating}</span>
+        </p>
+        <p>
+          <span>🌟</span>
+          <span>{movie.userRating}</span>
+        </p>
+        <p>
+          <span>⏳</span>
+          <span>{movie.runtime} min</span>
+        </p>
+
+        <button
+          className="btn-delete"
+          onClick={() => onDeleteWatched(movie.imdbID)}
+        >
+          X
+        </button>
+      </div>
+    </li>
+  );
+}
+
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
@@ -504,35 +534,5 @@ function WatchedMoviesList({ watched, onDeleteWatched }) {
         />
       ))}
     </ul>
-  );
-}
-
-function WatchedMovie({ movie, onDeleteWatched }) {
-  return (
-    <li>
-      <img src={movie.poster} alt={`${movie.title} poster`} />
-      <h3>{movie.title}</h3>
-      <div>
-        <p>
-          <span>⭐️</span>
-          <span>{movie.imdbRating}</span>
-        </p>
-        <p>
-          <span>🌟</span>
-          <span>{movie.userRating}</span>
-        </p>
-        <p>
-          <span>⏳</span>
-          <span>{movie.runtime} min</span>
-        </p>
-
-        <button
-          className="btn-delete"
-          onClick={() => onDeleteWatched(movie.imdbID)}
-        >
-          X
-        </button>
-      </div>
-    </li>
   );
 }
