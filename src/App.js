@@ -301,9 +301,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   useEffect(
     function () {
       if (userRating) countRef.current = countRef.current + 1;
-      console.log("User rating set to:", userRating);
     },
-    [userRating]
+    [userRating],
   );
 
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
@@ -379,7 +378,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       async function getMovieDetails() {
         setIsLoading(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
+          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
         );
         const data = await res.json();
         setMovie(data);
@@ -387,7 +386,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       }
       getMovieDetails();
     },
-    [selectedId]
+    [selectedId],
   );
 
   useEffect(
@@ -399,7 +398,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
         document.title = "MovieMingle"; //clean up function
       };
     },
-    [title]
+    [title],
   );
 
   return (
@@ -516,7 +515,7 @@ function WatchedSummary({ watched }) {
         </p>
         <p>
           <span>⏳</span>
-          <span>{avgRuntime} min</span>
+          <span>{avgRuntime.toFixed(2)} min</span>
         </p>
       </div>
     </div>
